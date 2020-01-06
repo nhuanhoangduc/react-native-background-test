@@ -1,8 +1,8 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
+import LoginScreen from '@mobile/screens/LoginScreen';
+import HomeScreen from '@mobile/screens/HomeScreen';
 
 
 const Router = createStackNavigator({
