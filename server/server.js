@@ -7,7 +7,7 @@ const app = express();
 
 
 graphQlServer.applyMiddleware({ app });
-app.listen(process.env.SERVER_PORT, () => {
-    const serverUrl = `http://localhost:${process.env.SERVER_PORT}${graphQlServer.graphqlPath}`;
+app.listen(3000, () => {
+    const serverUrl = `http://localhost:${3000}${graphQlServer.graphqlPath}`;
     console.log(`🚀 Server ready at ${serverUrl}`)
 });

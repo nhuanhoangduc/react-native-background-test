@@ -1,13 +1,15 @@
 
 module.exports = {
     Query: {
-
+        me: (_, __, context) => {
+            return null;
+        },
     },
 
     Mutation: {
-        addUser: () => {
+        login: (_, { username, password }) => {
             return null;
-        }
+        },
     },
 
     User: {
