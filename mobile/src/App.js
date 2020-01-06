@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { ApplicationProvider } from '@ui-kitten/components';
+import { mapping, dark as darkTheme } from '@eva-design/eva';
 
 import Router from './Router';
 
 
 const App = () => {
     return (
-        <View style={{ flex: 1 }}>
+        <ApplicationProvider mapping={mapping} theme={darkTheme}>
             <Router />
-        </View>
+        </ApplicationProvider>
     );
 };
 
