@@ -28,7 +28,7 @@ const Router = () => {
     const { loading, error, data } = useQuery(GET_ME);
 
     const Stack = useMemo(() => {
-        if (!loading) {
+        if (!loading && !error && data) {
             const defaultScreen = data.me ? 'HomeScreen' : 'LoginScreen';
             return createStack(defaultScreen);
         } else {
@@ -44,7 +44,7 @@ const Router = () => {
 
     if (error) return (
         <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <Text category="h3">{error.message}</Text>
+            <Text category="h5">{error.message}</Text>
         </Layout>
     );
 

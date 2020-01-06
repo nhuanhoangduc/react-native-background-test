@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-navigation';
 import { Button, Layout, Text, Input} from '@ui-kitten/components';
 import { useMutation } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { global_UPDATE_TOKEN } from '@mobile/store/global/actions';
 
@@ -44,31 +45,38 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, }}>
-                <Text category="h1">Photos sharing</Text>
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flex: 1}}
+                // enableAutomaticScroll={true}
+                extraScrollHeight={50}
+            >
+                <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, }}>
+                    <Text category="h1">Photos sharing</Text>
 
-                <Input
-                    style={{ marginTop: 50, }}
-                    size='medium'
-                    label='Username'
-                    {...usernameChanges}
-                />
-                <Input
-                    style={{ marginTop: 10, }}
-                    size='medium'
-                    label='Password'
-                    secureTextEntry={true}
-                    {...passwordChanges}
-                />
+                    <Input
+                        style={{ marginTop: 50, }}
+                        size='medium'
+                        label='Username'
+                        {...usernameChanges}
+                    />
+                    <Input
+                        style={{ marginTop: 10, }}
+                        size='medium'
+                        label='Password'
+                        secureTextEntry={true}
+                        {...passwordChanges}
+                    />
 
-                <Button style={{ width: '100%', marginTop: 30, }} onPress={onLoginButtonPressed} disabled={loading}>
-                    { loading ? 'Progressing...' : 'Login' }
-                </Button>
+                    <Button style={{ width: '100%', marginTop: 30, }} onPress={onLoginButtonPressed} disabled={loading}>
+                        { loading ? 'Progressing...' : 'Login' }
+                    </Button>
 
-                {error ? (
-                    <Text style={{ marginTop: 10, color: 'red', }}>{error.message}</Text>
-                ) : null}
-            </Layout>
+                    {error ? (
+                        <Text style={{ marginTop: 10, color: 'red', }}>{error.message}</Text>
+                    ) : null}
+                </Layout>
+            </KeyboardAwareScrollView>
         </SafeAreaView>
     );
 };
