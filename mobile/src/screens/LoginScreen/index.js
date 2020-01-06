@@ -57,6 +57,7 @@ const LoginScreen = ({ navigation }) => {
                     style={{ marginTop: 10, }}
                     size='medium'
                     label='Password'
+                    secureTextEntry={true}
                     {...passwordChanges}
                 />
 

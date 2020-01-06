@@ -14,7 +14,7 @@ const reducers = combineReducers({
     global: persistReducer({
         key: 'global',
         storage: storage,
-        whitelist: ['registedDeviceToken'],
+        whitelist: ['token'],
     }, globalReducer),
 });
 

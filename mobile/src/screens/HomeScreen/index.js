@@ -1,12 +1,17 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
+import { Divider, TopNavigation, Layout, Text} from '@ui-kitten/components';
 
 
 const HomeScreen = () => {
     return (
-        <View>
-            <Text>Home Screen</Text>
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <TopNavigation title='Home' alignment='center'/>
+            <Divider/>
+            <Layout style={{ flex: 1 }}>
+                <Text>Home Screen</Text>
+            </Layout>
+        </SafeAreaView>
     );
 };
 
