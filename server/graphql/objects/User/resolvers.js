@@ -13,7 +13,7 @@ module.exports = {
     Mutation: {
         login: async (_, { username, password }) => {
             const user = await UserModel.findOne({
-                username: username,
+                username: username.toLowerCase(),
             });
             if (!user) {
                 throw new Error('User not found');

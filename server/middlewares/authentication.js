@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        req.user = { _id: '5e1368e374554e18787bf34a', username: 'admin', iat: 1578330750 };
+        req.user = null;
         next();
     }
 };
