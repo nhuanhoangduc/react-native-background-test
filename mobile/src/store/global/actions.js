@@ -5,3 +5,10 @@ import _ from 'lodash';
 export const global_RESET = createAction('global_RESET');
 export const global_UPDATE_STATE = createAction('global_UPDATE_STATE');
 export const global_UPDATE_STATE_SHALLOW = createAction('global_UPDATE_STATE_SHALLOW');
+
+
+export const global_UPDATE_TOKEN = (token) => (dispatch) => {
+    dispatch(global_UPDATE_STATE({
+        token: token,
+    }));
+};

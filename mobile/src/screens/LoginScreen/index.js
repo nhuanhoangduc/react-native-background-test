@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import { Button, Layout, Text, Input} from '@ui-kitten/components';
+import { useMutation } from '@apollo/react-hooks';
+import { useDispatch } from 'react-redux';
+
+import { global_UPDATE_TOKEN } from '@mobile/store/global/actions';
+
+import LOGIN from '@mobile/graphql/mutations/login';
 
 
 const useInputChanges = (initialValue = '') => {
@@ -11,10 +17,30 @@ const useInputChanges = (initialValue = '') => {
     };
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const [login, { loading, error, data }] = useMutation(LOGIN);
+
+    useEffect(() => {
+        if (!loading && !error && data && data.login) {
+            const token = data.login.token;
+
+            dispatch(global_UPDATE_TOKEN(token));
+            navigation.navigate('HomeScreen');
+        }
+    }, [loading]);
 
     const usernameChanges = useInputChanges();
     const passwordChanges = useInputChanges();
+
+    const onLoginButtonPressed = () => {
+        login({
+            variables: {
+                username: usernameChanges.value,
+                password: passwordChanges.value,
+            },
+        });
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -34,9 +60,13 @@ const LoginScreen = () => {
                     {...passwordChanges}
                 />
 
-                <Button style={{ width: '100%', marginTop: 30, }}>
-                    Login
+                <Button style={{ width: '100%', marginTop: 30, }} onPress={onLoginButtonPressed} disabled={loading}>
+                    { loading ? 'Progressing...' : 'Login' }
                 </Button>
+
+                {error ? (
+                    <Text style={{ marginTop: 10, color: 'red', }}>{error.message}</Text>
+                ) : null}
             </Layout>
         </SafeAreaView>
     );

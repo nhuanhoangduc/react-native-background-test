@@ -3,30 +3,7 @@ import { fromJS } from 'sota-immutable';
 
 
 const defaultState = {
-    // App version
-    version: '1.0.0',
-
-    // App state
-    appState: 'active',
-
-    // Modal state
-    showModal: false,
-    modalContent: null,
-
-    // Sidebar state
-    sidebarDrawerInstance: null,
-
-    // Route history
-    previousRouteName: '',
-
-    // Header scroll animation
-    headerAnimations: {},
-
-    // Conection status
-    isConnectedInternet: false,
-
-    // Register device token
-    registedDeviceToken: null,
+    token: '',
 };
 
 

@@ -1,11 +1,13 @@
-import React, { useLayoutEffect, useState, useMemo } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { useQuery } from '@apollo/react-hooks';
+import { Layout, Text } from '@ui-kitten/components';
+
+import GET_ME from '@mobile/graphql/querys/getMe';
 
 import LoginScreen from '@mobile/screens/LoginScreen';
 import HomeScreen from '@mobile/screens/HomeScreen';
-
 
 const createStack = (defaultScreen = 'LoginScreen') => {
     return createAppContainer(createStackNavigator({
@@ -23,22 +25,28 @@ const createStack = (defaultScreen = 'LoginScreen') => {
 
   
 const Router = () => {
-    const [defaultScreen, setDefaultScreen] = useState(null);
+    const { loading, error, data } = useQuery(GET_ME);
+
     const Stack = useMemo(() => {
-        if (!defaultScreen) {
+        if (!loading) {
+            const defaultScreen = data.me ? 'HomeScreen' : 'LoginScreen';
+            return createStack(defaultScreen);
+        } else {
             return () => null;
         }
+    }, [loading]);
 
-        return createStack(defaultScreen);
-    }, [defaultScreen]);
+    if (loading) return (
+        <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+            <Text category="h3">Loading...</Text>
+        </Layout>
+    );
 
-    useLayoutEffect(() => {
-        setDefaultScreen('LoginScreen');
-    }, []);
-
-    if (!defaultScreen) {
-        return null;
-    }
+    if (error) return (
+        <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+            <Text category="h3">{error.message}</Text>
+        </Layout>
+    );
 
     return <Stack />;
 };
