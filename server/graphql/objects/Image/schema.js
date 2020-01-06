@@ -11,5 +11,6 @@ module.exports = gql`
 
     extend type Query {
         uploadedImages: [Image]
+        uploadedImageHashes: [String]
     }
 `;
