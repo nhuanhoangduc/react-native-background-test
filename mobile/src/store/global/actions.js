@@ -12,3 +12,21 @@ export const global_UPDATE_TOKEN = (token) => (dispatch) => {
         token: token,
     }));
 };
+
+
+export const global_LOAD_PHOTOS = (nodes) => (dispatch) => {
+    const photoMapping = _.reduce(nodes, (memo, { node }) => {
+        const photo = node.image;
+
+        memo[photo.filename] = {
+            filename: photo.filename,
+            uri: photo.uri,
+        };
+
+        return memo;
+    }, {});
+
+    dispatch(global_UPDATE_STATE({
+        photos: photoMapping,
+    }));
+};
