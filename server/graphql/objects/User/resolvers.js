@@ -5,8 +5,8 @@ const UserModel = require('@server/database/mongo/UserModel');
 
 module.exports = {
     Query: {
-        me: (_, __, context) => {
-            return null;
+        me: (_, __, { user }) => {
+            return user;
         },
     },
 

@@ -7,6 +7,10 @@ const server = new ApolloServer({
     resolvers: resolvers,
     playground: true,
     introspection: true,
+    context: ({ req }) => {
+        const user = req.user;
+        return { user: user, };
+    },
 });
 
 
