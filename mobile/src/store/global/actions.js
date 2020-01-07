@@ -28,7 +28,7 @@ export const global_UPDATE_LOCAL_PHOTO = (id, photo) => (dispatch) => {
 };
 
 export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
-    await dispatch(global_START_QUEUE());
+    await dispatch(global_INIT_QUEUE());
 
     const photoMapping = _.reduce(nodes, (memo, { node }) => {
         const photo = node.image;
@@ -64,7 +64,7 @@ export const global_LOAD_UPLOADED_PHOTOS = (uploadedPhotos) => (dispatch) => {
 };
 
 
-export const global_START_QUEUE = () => async (dispatch) => {
+export const global_INIT_QUEUE = () => async (dispatch) => {
     const queue = await queueFactory();
 
     queue.addWorker('hash-job', hashWorker, {
@@ -121,11 +121,22 @@ export const global_START_QUEUE = () => async (dispatch) => {
         }
     });
 
-    await queue.start();
+    // await queue.start();
 
     dispatch(global_UPDATE_STATE({
         queue: queue,
     }));
+};
+
+export const global_START_QUEUE = () => (dispatch, getState) => {
+    const queue = getState().global.queue;
+    
+    if (!queue) {
+        return;
+    }
+
+    console.log('[js] queue started');
+    queue.start();
 };
 
 export const global_ADD_JOB = (jobName, payload, config = {}) => (dispatch, getState) => {
@@ -135,5 +146,5 @@ export const global_ADD_JOB = (jobName, payload, config = {}) => (dispatch, getS
         return;
     }
 
-    queue.createJob(jobName, payload, config, true);
+    queue.createJob(jobName, payload, config, false);
 };
