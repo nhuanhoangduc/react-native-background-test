@@ -38,9 +38,9 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             hash: fileHash,
         });
 
-        // if (existedImage) {
-        //     throw new Error('Dupplicated image');
-        // }
+        if (existedImage) {
+            throw new Error('Dupplicated image');
+        }
 
         const newImage = await ImageModel.create({
             userId: user._id,

@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./schemas');
 
@@ -7,26 +8,19 @@ const server = new ApolloServer({
     resolvers: resolvers,
     playground: true,
     introspection: true,
-    context: ({ req, connection }) => {
+    context: ({ req, connection, payload }) => {
         if (connection) {
-            console.log('meo meo meo', connection.authToken)
-            return connection.context;
+            try {
+                const token = payload.token;
+                const decoded = jwt.verify(token, 'server');
+                return { user: decoded, ...connection.context, };
+            } catch (error) {
+                return { user: null, ...connection.context, };
+            }
         } else {
             const user = req.user;
             return { user: user, };
         }
-    },
-    subscriptions: {
-        onConnect: (connectionParams, webSocket) => {
-            console.log('gau gau gau', connectionParams)
-          if (connectionParams.authToken) {
-            return {};
-          }
-
-          return {};
-    
-          throw new Error('Missing auth token!');
-        },
     },
 });
 

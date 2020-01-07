@@ -28,12 +28,11 @@ wsClient.use([
     {
         applyMiddleware(operationOptions, next) {
             const token = store.getState().global.token;
-            operationOptions["authToken"] = token;
+            operationOptions.token= token;
             next();
         }
     }
 ]);
-console.log(wsClient)
 const wsLink = new WebSocketLink(wsClient);
 
 

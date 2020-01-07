@@ -18,7 +18,7 @@ const HomeScreen = () => {
     const { loading, error, data } = useQuery(GET_UPLOADED_IMAGES);
     const { data: subData } = useSubscription(IMAGE_UPLOADED_SUB);
 
-    const loadPhotos = async () => {
+    const loadPhotos = async (lastPhoto = '') => {
         if (Platform.OS === 'android') {
             try {
                 const granted = await PermissionsAndroid.request(
@@ -41,11 +41,19 @@ const HomeScreen = () => {
         }
 
         try {
-            const result = await CameraRoll.getPhotos({
-                first: 200,
+            const params = {
+                first: 20,
                 assetType: 'Photos',
-            });
+            };
+            if (lastPhoto) params.after = lastPhoto;
+
+            const result = await CameraRoll.getPhotos(params);
+
             dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
+
+            if (result.page_info.has_next_page) {
+                loadPhotos(result.page_info.end_cursor);
+            }
         } catch (error) {
             console.log(error)
         }

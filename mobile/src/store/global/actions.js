@@ -82,11 +82,6 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
             console.log('Job "hash-job" with id ' + id + ' had an attempt end in failure.');
         },
         
-        // onFailed job callback handler is fired if job fails enough times to reach max number of attempts.
-        onFailed: async (id, payload) => {
-            console.log('Job "hash-job" with id ' + id + ' has failed.');
-        },
-        
         // onComplete job callback handler fires after job has completed processing successfully or failed entirely.
         onComplete: async (id, payload) => {
             console.log('Job "hash-job" with id ' + id + ' has completed processing.');
@@ -108,11 +103,6 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
         // onFailure job callback handler is fired after each time a job fails (onFailed also fires if job has reached max number of attempts).
         onFailure: async (id, payload) => {         
             console.log('Job "upload-job" with id ' + id + ' had an attempt end in failure.');
-        },
-        
-        // onFailed job callback handler is fired if job fails enough times to reach max number of attempts.
-        onFailed: async (id, payload) => {
-            console.log('Job "upload-job" with id ' + id + ' has failed.');
         },
         
         // onComplete job callback handler fires after job has completed processing successfully or failed entirely.

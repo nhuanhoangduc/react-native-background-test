@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const { withFilter } = require('apollo-server-express');
 const ImageModel = require('@server/database/mongo/ImageModel');
 const pubsub = require('@server/graphql/pubsub');
 
@@ -6,7 +7,13 @@ const pubsub = require('@server/graphql/pubsub');
 module.exports = {
     Subscription: {
         imageUploaded: {
-            subscribe: () => pubsub.asyncIterator(['IMAGE_UPLOADED']),
+            subscribe: withFilter(
+                () => pubsub.asyncIterator('IMAGE_UPLOADED'),
+                (payload, variables, context) => {
+                    const { imageUploaded } = payload;
+                    return _.get(imageUploaded, ['userId'], '').toString() === _.get(context, ['user', '_id'], '').toString();
+                },
+            ),
         },
     },
     
