@@ -16,6 +16,7 @@ module.exports = {
             "@mobile/configs": path.resolve(__dirname, 'src', 'configs'),
             "@mobile/store": path.resolve(__dirname, 'src', 'store'),
             "@mobile/graphql": path.resolve(__dirname, 'src', 'graphql'),
+            "@mobile/workers": path.resolve(__dirname, 'src', 'workers'),
         },
     },
 };

@@ -6,6 +6,7 @@ const defaultState = {
     token: '',
     localPhotos: {}, // { _id, hash, imageUrl, cacheUrl }
     uploadedPhotos: {}, // { _id, hash, imageUrl }
+    queue: null,
 };
 
 
