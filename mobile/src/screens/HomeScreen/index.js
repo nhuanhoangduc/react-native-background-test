@@ -4,17 +4,19 @@ import { SafeAreaView } from 'react-navigation';
 import { Divider, TopNavigation, Layout, Text } from '@ui-kitten/components';
 import CameraRoll from '@react-native-community/cameraroll';
 import { useDispatch } from 'react-redux';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 
 import Photos from './Photos';
 import { global_LOAD_LOCAL_PHOTOS, global_LOAD_UPLOADED_PHOTOS } from '@mobile/store/global/actions';
 
 import GET_UPLOADED_IMAGES from '@mobile/graphql/querys/getUploadedImages';
+import IMAGE_UPLOADED_SUB from '@mobile/graphql/subscriptions/imageUploadedSubscription';
 
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
     const { loading, error, data } = useQuery(GET_UPLOADED_IMAGES);
+    const { data: subData } = useSubscription(IMAGE_UPLOADED_SUB);
 
     const loadPhotos = async () => {
         if (Platform.OS === 'android') {
@@ -55,6 +57,12 @@ const HomeScreen = () => {
             loadPhotos();
         }
     }, [loading]);
+
+    useEffect(() => {
+        if (subData && subData.imageUploaded) {
+            dispatch(global_LOAD_UPLOADED_PHOTOS([subData.imageUploaded]));
+        }
+    }, [subData]);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

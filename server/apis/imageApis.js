@@ -2,7 +2,10 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const multer = require('multer');
+const pubsub = require('@server/graphql/pubsub');
+
 const ImageModel = require('@server/database/mongo/ImageModel');
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -35,9 +38,9 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             hash: fileHash,
         });
 
-        if (existedImage) {
-            throw new Error('Dupplicated image');
-        }
+        // if (existedImage) {
+        //     throw new Error('Dupplicated image');
+        // }
 
         const newImage = await ImageModel.create({
             userId: user._id,
@@ -45,6 +48,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             imageUrl: `/files/${file.filename}`,
         });
 
+        pubsub.publish('IMAGE_UPLOADED', { imageUploaded: newImage });
         res.json(newImage);
     } catch (error) {
         await fs.unlink(path.join(__dirname, '..', 'uploads', file.filename));

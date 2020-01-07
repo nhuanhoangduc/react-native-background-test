@@ -23,6 +23,10 @@ const { schemas, resolvers } = _.reduce(objectFolders, (memo, folderName) => {
 const baseSchema = gql`
     scalar JSON
 
+    type Subscription {
+        _empty: String
+    }
+
     type Query {
         _empty: String
     }

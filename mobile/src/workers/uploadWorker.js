@@ -11,10 +11,10 @@ const worker = async (id, { photoId }) => {
     const photo = global_photoDetailSelector(state, photoId, true);
     const uploadedHashes = global_uploadedHashesSelector(state);
 
-    if (uploadedHashes[photo.hash]) {
-        console.log('Image existed');
-        return;
-    }
+    // if (uploadedHashes[photo.hash]) {
+    //     console.log('Image existed');
+    //     return;
+    // }
 
     const data = new FormData();
 

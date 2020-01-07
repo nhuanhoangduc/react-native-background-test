@@ -9,6 +9,11 @@ module.exports = gql`
         hash: String
     }
 
+    extend type Subscription {
+        imageUploaded: Image
+    }
+    
+
     extend type Query {
         uploadedImages: [Image]
         uploadedImageHashes: [String]

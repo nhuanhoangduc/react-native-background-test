@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -24,7 +25,12 @@ app.use(authenticationMiddleware);
 app.use('/images', imageApis);
 
 graphQlServer.applyMiddleware({ app });
-app.listen(3000, () => {
-    const serverUrl = `http://localhost:${3000}${graphQlServer.graphqlPath}`;
-    console.log(`🚀 Server ready at ${serverUrl}`)
+
+const httpServer = http.createServer(app);
+graphQlServer.installSubscriptionHandlers(httpServer);
+
+// ⚠️ Pay attention to the fact that we are calling `listen` on the http server variable, and not on `app`.
+httpServer.listen(3000, () => {
+  console.log(`🚀 Server ready at http://localhost:${3000}${graphQlServer.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${3000}${graphQlServer.subscriptionsPath}`)
 });

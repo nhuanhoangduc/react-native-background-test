@@ -121,7 +121,7 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
         }
     });
 
-    // await queue.start();
+    await queue.start();
 
     dispatch(global_UPDATE_STATE({
         queue: queue,
@@ -146,5 +146,5 @@ export const global_ADD_JOB = (jobName, payload, config = {}) => (dispatch, getS
         return;
     }
 
-    queue.createJob(jobName, payload, config, false);
+    queue.createJob(jobName, payload, config, true);
 };
