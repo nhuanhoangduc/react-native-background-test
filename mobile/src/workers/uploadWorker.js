@@ -20,10 +20,9 @@ const worker = async (id, { photoId }) => {
     data.append('hash', photo.hash);
 
     try {
-        const reponse = await baseApi.POST('/images', data);
-        console.log(response);
+        await baseApi.POST('/images', data);
     } catch (error) {
-        console.log(error);
+
     }
 };
 

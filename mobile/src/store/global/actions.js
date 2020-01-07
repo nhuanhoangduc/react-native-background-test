@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import _ from 'lodash';
 import queueFactory from 'react-native-queue';
 
+import configs from '@mobile/configs';
 import hashWorker from '@mobile/workers/hashWorker';
 import uploadWorker from '@mobile/workers/uploadWorker';
 
@@ -48,8 +49,18 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
     }));
 };
 
-export const global_LOAD_UPLOADED_PHOTOS = (uploadedImages) => (dispatch) => {
-    console.log(uploadedImages);
+export const global_LOAD_UPLOADED_PHOTOS = (uploadedPhotos) => (dispatch) => {
+    const mappingPhotos = _.reduce(uploadedPhotos, (memo, uploadedPhoto) => {
+        memo[uploadedPhoto._id] = {
+            ...uploadedPhoto,
+            imageUrl: configs.serverUrl + uploadedPhoto.imageUrl,
+        };
+        return memo;
+    }, {});
+
+    dispatch(global_UPDATE_STATE({
+        uploadedPhotos: mappingPhotos,
+    }));
 };
 
 

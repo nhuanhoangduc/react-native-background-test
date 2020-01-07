@@ -13,8 +13,8 @@ const Photos = memo(() => {
     const localPhotos = useSelector(global_localPhotosSelector);
 
     const sectionData = [
-        { title: 'Uploaded photos', data: uploadedPhotos, },
-        { title: 'Local photos', data: localPhotos, },
+        { title: 'Uploaded photos', data: uploadedPhotos, isLocal: false, },
+        { title: 'Local photos', data: localPhotos, isLocal: true, },
     ];
 
     return (
@@ -23,9 +23,9 @@ const Photos = memo(() => {
                 sections={sectionData}
                 stickySectionHeadersEnabled={true}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item: photos }) => (
+                renderItem={({ item: photos, section }) => (
                     <View style={{ marginTop: 10, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
-                        {_.map(photos, (photo) => <PhotoViewer key={photo._id} id={photo._id} isLocal={true} />)}
+                        {_.map(photos, (photo) => <PhotoViewer key={photo._id} id={photo._id} isLocal={section.isLocal} />)}
                     </View>
                 )}
                 renderSectionHeader={({ section: { title } }) => (
