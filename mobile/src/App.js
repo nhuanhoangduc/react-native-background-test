@@ -24,30 +24,30 @@ const App = () => {
             requiresDeviceIdle: false,    // Default
             requiresBatteryNotLow: false, // Default
             requiresStorageNotLow: false  // Default
-          }, () => {
+        }, () => {
             console.log("[js] Start queue");
             store.dispatch(global_START_QUEUE());
 
             setTimeout(() => {
                 BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
             }, 25000);
-          }, (error) => {
+        }, (error) => {
             console.log("[js] RNBackgroundFetch failed to start");
-          });
+        });
 
-          BackgroundFetch.status((status) => {
+        BackgroundFetch.status((status) => {
             switch(status) {
-              case BackgroundFetch.STATUS_RESTRICTED:
-                console.log("BackgroundFetch restricted");
-                break;
-              case BackgroundFetch.STATUS_DENIED:
-                console.log("BackgroundFetch denied");
-                break;
-              case BackgroundFetch.STATUS_AVAILABLE:
-                console.log("BackgroundFetch is enabled");
-                break;
+                case BackgroundFetch.STATUS_RESTRICTED:
+                    console.log("BackgroundFetch restricted");
+                    break;
+                case BackgroundFetch.STATUS_DENIED:
+                    console.log("BackgroundFetch denied");
+                    break;
+                case BackgroundFetch.STATUS_AVAILABLE:
+                    console.log("BackgroundFetch is enabled");
+                    break;
             }
-          });
+        });
     }, []);
 
     return (
