@@ -19,7 +19,7 @@ const HomeScreen = () => {
         const loadPhotos = async () => {
             try {
                 const result = await CameraRoll.getPhotos({
-                    first: 20,
+                    first: 200,
                     assetType: 'Photos',
                 });
                 dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
