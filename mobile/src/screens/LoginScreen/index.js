@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Button, Layout, Text, Input} from '@ui-kitten/components';
 import { useMutation } from '@apollo/react-hooks';
@@ -48,8 +49,7 @@ const LoginScreen = ({ navigation }) => {
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 contentContainerStyle={{ flex: 1}}
-                // enableAutomaticScroll={true}
-                extraScrollHeight={50}
+                extraScrollHeight={Dimensions.get('window').height * 0.2}
             >
                 <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, }}>
                     <Text category="h1">Photos sharing</Text>
