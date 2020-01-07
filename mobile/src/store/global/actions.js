@@ -17,6 +17,14 @@ export const global_UPDATE_TOKEN = (token) => (dispatch) => {
 };
 
 
+export const global_UPDATE_LOCAL_PHOTO = (id, photo) => (dispatch) => {
+    dispatch(global_UPDATE_STATE({
+        localPhotos: {
+            [id]: photo
+        },
+    }));
+};
+
 export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
     await dispatch(global_START_QUEUE());
 
@@ -28,18 +36,19 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
             imageUrl: photo.uri,
         };
 
+        dispatch(global_ADD_JOB('hash-job', {
+            _id: photo.filename,
+            imageUrl: photo.uri,
+        }, {
+            timeout: 30000
+        }))
+
         return memo;
     }, {});
 
     dispatch(global_UPDATE_STATE({
         localPhotos: photoMapping,
     }));
-
-    dispatch(global_ADD_JOB('hash-job', {
-        localPhotos: photoMapping,
-    }, {
-        timeout: 2000,
-    }))
 };
 
 export const global_LOAD_UPLOADED_PHOTOS = (uploadedImages) => (dispatch) => {

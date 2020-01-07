@@ -231,6 +231,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.5):
     - React
+  - RNFS (2.16.2):
+    - React
   - RNGestureHandler (1.5.3):
     - React
   - RNReanimated (1.4.0):
@@ -274,6 +276,7 @@ DEPENDENCIES:
   - RealmJS (from `../node_modules/realm`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -344,6 +347,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -387,12 +392,13 @@ SPEC CHECKSUMS:
   RealmJS: ffbd2fd48dc83692626e2d017c4c6a51ac647f47
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNCMaskedView: c8b53164b85ecf94c9a44d67082df0f03c1f74cc
+  RNFS: 0d4191b1052bef9ce70deff00a5b4169c62bbd9b
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNScreens: 6adf01eb4080f44af6cca551207c6b0505066857
   RNSVG: 9d45f03136ecc9b5497e12f6f20838b568acb9f4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: c7f9859269f5f790ff6c76a1d99ed70f29652442
+PODFILE CHECKSUM: c269b3e3a0c65ab442cbee11aa1d4d15d7d56d43
 
 COCOAPODS: 1.8.4
