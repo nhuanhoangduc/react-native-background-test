@@ -16,45 +16,43 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     const { loading, error, data } = useQuery(GET_UPLOADED_IMAGES);
 
-    useEffect(() => {
-        const loadPhotos = async () => {
-            if (Platform.OS === 'android') {
-                try {
-                    const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                        {
-                            'title': 'Access Storage',
-                            'message': 'Access Storage for the pictures'
-                        }
-                    )
-                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        console.log("You can use read from the storage")
-                    } else {
-                        console.log("Storage permission denied")
-                        return;
+    const loadPhotos = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                    {
+                        'title': 'Access Storage',
+                        'message': 'Access Storage for the pictures'
                     }
-                } catch (err) {
-                    console.warn(err)
+                )
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log("You can use read from the storage")
+                } else {
+                    console.log("Storage permission denied")
                     return;
                 }
+            } catch (err) {
+                console.warn(err)
+                return;
             }
+        }
 
-            try {
-                const result = await CameraRoll.getPhotos({
-                    first: 200,
-                    assetType: 'Photos',
-                });
-                dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
-            } catch (error) {
-                console.log(error)
-            }
-        };
-        loadPhotos();
-    }, []);
+        try {
+            const result = await CameraRoll.getPhotos({
+                first: 200,
+                assetType: 'Photos',
+            });
+            dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     useEffect(() => {
         if (!loading && !error && data && data.uploadedImages) {
             dispatch(global_LOAD_UPLOADED_PHOTOS(data.uploadedImages));
+            loadPhotos();
         }
     }, [loading]);
 

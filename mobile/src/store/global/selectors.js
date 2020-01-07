@@ -26,6 +26,18 @@ export const global_uploadedPhotosSelector = createSelector(
     }
 );
 
+export const global_uploadedHashesSelector = createSelector(
+    [
+        (store) => store.global.uploadedPhotos,
+    ],
+    (uploadedPhotos) => {
+        return _.reduce(uploadedPhotos, (memo, uploadedPhoto) => {
+            memo[uploadedPhoto.hash] = true;
+            return memo;
+        }, {});
+    }
+);
+
 export const global_photoDetailSelector = createSelector(
     [
         (store) => store.global.localPhotos,
