@@ -4,8 +4,8 @@ import { fromJS } from 'sota-immutable';
 
 const defaultState = {
     token: '',
-    localPhotos: {}, // { hash, name, imageUrl, cacheUrl }
-    uploadedPhotos: {}, // { hash, imageUrl }
+    localPhotos: {}, // { _id, hash, imageUrl, cacheUrl }
+    uploadedPhotos: {}, // { _id, hash, imageUrl }
 };
 
 

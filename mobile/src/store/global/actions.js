@@ -19,7 +19,7 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => (dispatch) => {
         const photo = node.image;
 
         memo[photo.filename] = {
-            name: photo.filename,
+            _id: photo.filename,
             imageUrl: photo.uri,
         };
 
