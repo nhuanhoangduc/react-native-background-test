@@ -5,7 +5,6 @@ import store from '@mobile/store';
 
 const Request = axios.create({
     baseURL: configs.serverUrl,
-    headers: {'X-Custom-Header': 'foobar'}
 });
 
 const getHeaders = () => {
@@ -20,6 +19,13 @@ const getHeaders = () => {
 
 
 const baseApi = {
+    GET: (endpoint, data = null) => {
+        return Request.post(endpoint, {
+            headers: getHeaders(),
+            params: data,
+        });
+    },
+
     POST: (endpoint, data) => {
         return Request.post(endpoint, data, {
             headers: getHeaders(),

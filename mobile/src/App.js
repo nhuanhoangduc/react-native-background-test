@@ -2,14 +2,12 @@ import React, { useEffect } from 'react';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { mapping, dark as darkTheme } from '@eva-design/eva';
 import { Provider } from 'react-redux';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { PersistGate } from 'redux-persist/integration/react';
 import BackgroundFetch from "react-native-background-fetch";
 
 import Router from './Router';
 import store, { persistor } from '@mobile/store';
 import { global_START_QUEUE } from '@mobile/store/global/actions';
-import graphqlClient from '@mobile/graphql';
 
 
 const App = () => {
@@ -53,11 +51,9 @@ const App = () => {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <ApolloProvider client={graphqlClient}>
-                    <ApplicationProvider mapping={mapping} theme={darkTheme}>
-                        <Router />
-                    </ApplicationProvider>
-                </ApolloProvider>
+                <ApplicationProvider mapping={mapping} theme={darkTheme}>
+                    <Router />
+                </ApplicationProvider>
             </PersistGate>
         </Provider>
     );

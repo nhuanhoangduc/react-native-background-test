@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Button, Layout, Text, Input} from '@ui-kitten/components';
-import { useMutation } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { global_UPDATE_TOKEN } from '@mobile/store/global/actions';
-
-import LOGIN from '@mobile/graphql/mutations/login';
+import { usePost } from '@mobile/hooks';
 
 
 const useInputChanges = (initialValue = '') => {
@@ -21,11 +19,11 @@ const useInputChanges = (initialValue = '') => {
 
 const LoginScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    const [login, { loading, error, data }] = useMutation(LOGIN);
+    const { loading, error, response, request } = usePost('/authenticate');
 
     useEffect(() => {
-        if (!loading && !error && data && data.login) {
-            const token = data.login.token;
+        if (!loading && !error && response && response.data) {
+            const token = response.data;
 
             dispatch(global_UPDATE_TOKEN(token));
             navigation.navigate('HomeScreen');
@@ -36,11 +34,9 @@ const LoginScreen = ({ navigation }) => {
     const passwordChanges = useInputChanges();
 
     const onLoginButtonPressed = () => {
-        login({
-            variables: {
-                username: usernameChanges.value,
-                password: passwordChanges.value,
-            },
+        request({
+            username: usernameChanges.value,
+            password: passwordChanges.value,
         });
     };
 
