@@ -1,4 +1,4 @@
-const RNFS = require('react-native-fs');
+const mime = require('mime');
 
 import _ from 'lodash';
 import store from '@mobile/store';
@@ -13,22 +13,36 @@ const worker = async (id, { photoId }) => {
 
     const data = new FormData();
 
-    data.append('photo', {
-        uri: photo.imageUrl,
-        type: 'image/jpeg',
-        name: photo.filename,
-    });
+    if (photo.sourceType === 'video') {
+        data.append('video', {
+            uri: photo.imageUrl,
+            type: mime.getType(photo.filename),
+            name: photo.filename,
+        });
+    } else {
+        data.append('photo', {
+            uri: photo.imageUrl,
+            type: mime.getType(photo.filename),
+            name: photo.filename,
+        });
+    }
+
     _.forEach(photo, (value, key) => {
         data.append(key, value);
     })
 
     try {
-        const response = await baseApi.POST('/v1/api/photos', data);
+        const response = photo.sourceType === 'video'
+            ? await baseApi.POST('/v1/api/videos', data)
+            : await baseApi.POST('/v1/api/photos', data);
         const uploadedPhoto = response.data;
+
+        console.log(response.data);
 
         store.dispatch(global_LOAD_UPLOADED_PHOTO({
             ...uploadedPhoto,
             modificationDate: photo.modificationDate,
+            sourceType: photo.sourceType,
         }));
     } catch (error) {
         throw error;

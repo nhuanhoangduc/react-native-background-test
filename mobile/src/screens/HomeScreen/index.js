@@ -36,8 +36,8 @@ const HomeScreen = () => {
 
         try {
             const params = {
-                first: 20,
-                assetType: 'Photos',
+                first: 100,
+                assetType: 'All',
             };
             if (lastPhoto) params.after = lastPhoto;
 
