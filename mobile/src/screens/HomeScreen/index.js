@@ -6,7 +6,7 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { useDispatch } from 'react-redux';
 
 import Photos from './Photos';
-import { global_LOAD_LOCAL_PHOTOS } from '@mobile/store/global/actions';
+import { global_LOAD_LOCAL_PHOTOS, global_UPLOAD_LOCAL_PHOTO } from '@mobile/store/global/actions';
 
 
 const HomeScreen = () => {
@@ -43,12 +43,12 @@ const HomeScreen = () => {
 
             const result = await CameraRoll.getPhotos(params);
 
-            dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
+            await dispatch(global_LOAD_LOCAL_PHOTOS(result.edges));
 
             if (result.page_info.has_next_page) {
                 loadPhotos(result.page_info.end_cursor);
             } else {
-
+                dispatch(global_UPLOAD_LOCAL_PHOTO());
             }
         } catch (error) {
             console.log(error)

@@ -1,16 +1,28 @@
 import { createSelector } from 'reselect';
 import _ from 'lodash';
+import sort from 'fast-sort';
 
+
+export const global_sortedLocalPhotosSelector = (
+    [
+        (store) => store,
+    ],
+    (store) => {
+        const listPhotos = _.map(store.global.localPhotos, (localPhoto) => localPhoto);
+        const sortedPhostos = sort(listPhotos).desc(photo => photo.modificationDate);
+
+        return sortedPhostos;
+    }
+);
 
 export const global_localPhotosSelector = createSelector(
     [
-        (store) => store.global.localPhotos,
+        global_sortedLocalPhotosSelector,
     ],
-    (localPhotos) => {
-        return _.chain(localPhotos)
-        .map((localPhoto) => localPhoto)
-        .chunk(3)
-        .value();
+    (sortedPhostos) => {
+        return _.chain(sortedPhostos)
+            .chunk(3)
+            .value();
     }
 );
 
@@ -51,5 +63,28 @@ export const global_photoDetailSelector = createSelector(
         } else {
             return uploadedPhotos[photoId];
         }
+    }
+);
+
+export const global_unUploadedPhotoSelector = createSelector(
+    [
+        global_sortedLocalPhotosSelector,
+        (store) => store.global.lastTimestamp,
+    ],
+    (sortedPhostos, lastTimestamp) => {
+        let unUploadedPhoto = null;
+
+        if (sortedPhostos.length === 0) {
+            return null;
+        }
+
+        for (let i = sortedPhostos.length - 1; i >= 0; i--) {
+            if (sortedPhostos[i].modificationDate >= lastTimestamp) {
+                unUploadedPhoto = {...sortedPhostos[i]};
+                break;
+            }
+        }
+
+        return unUploadedPhoto;
     }
 );

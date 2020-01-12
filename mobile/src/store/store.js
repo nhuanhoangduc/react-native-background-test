@@ -12,9 +12,9 @@ import globalReducer from './global/reducer';
 const storage = AsyncStorage;
 const reducers = combineReducers({
     global: persistReducer({
-        key: 'global1',
+        key: 'global5',
         storage: storage,
-        whitelist: ['token'],
+        whitelist: ['token', 'uploadedPhotos', 'lastTimestamp'],
     }, globalReducer),
 });
 

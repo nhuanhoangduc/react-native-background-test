@@ -6,6 +6,8 @@ import configs from '@mobile/configs';
 import hashWorker from '@mobile/workers/hashWorker';
 import uploadWorker from '@mobile/workers/uploadWorker';
 
+import { global_unUploadedPhotoSelector } from './selectors';
+
 
 export const global_RESET = createAction('global_RESET');
 export const global_UPDATE_STATE = createAction('global_UPDATE_STATE');
@@ -54,14 +56,18 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
             sourceType: node.type,
         };
 
-        dispatch(global_ADD_JOB('hash-job', { photoId: photo.filename, }))
-
         return memo;
     }, {});
 
     dispatch(global_UPDATE_STATE({
         localPhotos: photoMapping,
     }));
+};
+
+export const global_UPLOAD_LOCAL_PHOTO = () => async (dispatch, getState) => {
+    const unUploadedPhoto = global_unUploadedPhotoSelector(getState());
+    console.log(unUploadedPhoto.imageUrl);
+    dispatch(global_ADD_JOB('upload-job', { photoId: unUploadedPhoto.id, }));
 };
 
 export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
@@ -72,6 +78,7 @@ export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
                 imageUrl: `${configs.serverUrl}/v1/api/photos/${uploadedPhoto.id}/thumbnail`
             },
         },
+        lastTimestamp: uploadedPhoto.modificationDate + 1,
     }));
 };
 

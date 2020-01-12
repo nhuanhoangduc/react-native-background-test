@@ -17,6 +17,7 @@ const Photos = memo(() => {
         { title: 'Local photos', data: localPhotos, isLocal: true, },
     ];
 
+
     return (
         <View style={{ flex: 1 }}>
             <SectionList
