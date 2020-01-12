@@ -31,7 +31,7 @@ const worker = async (id, { photoId }) => {
             modificationDate: photo.modificationDate,
         }));
     } catch (error) {
-        console.log(error);
+        throw error;
     }
     
     store.dispatch(global_UPLOAD_LOCAL_PHOTO());

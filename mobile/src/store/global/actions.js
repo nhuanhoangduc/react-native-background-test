@@ -66,8 +66,8 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
 
 export const global_UPLOAD_LOCAL_PHOTO = () => async (dispatch, getState) => {
     const unUploadedPhoto = global_unUploadedPhotoSelector(getState());
-    console.log(unUploadedPhoto.imageUrl);
-    dispatch(global_ADD_JOB('upload-job', { photoId: unUploadedPhoto.id, }));
+    console.log('uploading ' + unUploadedPhoto.imageUrl);
+    dispatch(global_ADD_JOB('upload-job', { photoId: unUploadedPhoto.id, }, { attempts: 4, }));
 };
 
 export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
@@ -83,7 +83,7 @@ export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
 };
 
 
-export const global_INIT_QUEUE = () => async (dispatch) => {
+export const global_INIT_QUEUE = () => async (dispatch, getState) => {
     const queue = await queueFactory();
 
     queue.addWorker('hash-job', hashWorker, {
@@ -98,8 +98,8 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
             console.log('Job "hash-job" with id ' + id + ' was successful.');
         },
         
-        // onFailure job callback handler is fired after each time a job fails (onFailed also fires if job has reached max number of attempts).
-        onFailure: async (id, payload) => {         
+        // onFailed job callback handler is fired after each time a job fails (onFailed also fires if job has reached max number of attempts).
+        onFailed: async (id, payload) => {         
             console.log('Job "hash-job" with id ' + id + ' had an attempt end in failure.');
         },
         
@@ -110,7 +110,7 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
     });
 
     queue.addWorker('upload-job', uploadWorker, {
-        // concurrency: 1,
+        concurrency: 1,
         
         onStart: async (id, payload) => {
             console.log('Job "upload-job" with id ' + id + ' has started processing.');  
@@ -121,9 +121,15 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
             console.log('Job "upload-job" with id ' + id + ' was successful.');
         },
         
-        // onFailure job callback handler is fired after each time a job fails (onFailed also fires if job has reached max number of attempts).
-        onFailure: async (id, payload) => {         
-            console.log('Job "upload-job" with id ' + id + ' had an attempt end in failure.');
+        // onFailed job callback handler is fired after each time a job fails (onFailed also fires if job has reached max number of attempts).
+        onFailed: async (id, payload) => {         
+            console.log('Job "upload-job" with id ' + id + ' had an attempt end in failed.');
+
+            const unUploadedPhoto = global_unUploadedPhotoSelector(getState());
+            dispatch(global_UPDATE_STATE({
+                lastTimestamp: unUploadedPhoto.modificationDate + 1,
+            }));
+            dispatch(global_UPLOAD_LOCAL_PHOTO());
         },
         
         // onComplete job callback handler fires after job has completed processing successfully or failed entirely.
