@@ -32,11 +32,26 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
 
     const photoMapping = _.reduce(nodes, (memo, { node }) => {
         const photo = node.image;
+        const location = node.location;
 
         memo[photo.filename] = {
-            _id: photo.filename,
+            id: photo.filename,
             filename: photo.filename,
             imageUrl: photo.uri,
+            
+            creationDate: node.timestamp,
+            modificationDate: node.timestamp,
+            width: photo.width,
+            height: photo.height,
+            isFavorite: false,
+            isHidden: false,
+            localIdentifier: '',
+            latitude: location.latitude,
+            longitude: location.longitude,
+            altitude: location.altitude,
+            heading: location.heading,
+            speed: location.speed,
+            sourceType: node.type,
         };
 
         dispatch(global_ADD_JOB('hash-job', { photoId: photo.filename, }))
@@ -49,17 +64,14 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
     }));
 };
 
-export const global_LOAD_UPLOADED_PHOTOS = (uploadedPhotos) => (dispatch) => {
-    const mappingPhotos = _.reduce(uploadedPhotos, (memo, uploadedPhoto) => {
-        memo[uploadedPhoto._id] = {
-            ...uploadedPhoto,
-            imageUrl: configs.serverUrl + uploadedPhoto.imageUrl,
-        };
-        return memo;
-    }, {});
-
+export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
     dispatch(global_UPDATE_STATE({
-        uploadedPhotos: mappingPhotos,
+        uploadedPhotos: {
+            [uploadedPhoto.id]: {
+                ...uploadedPhoto,
+                imageUrl: `${configs.serverUrl}/v1/api/photos/${uploadedPhoto.id}/thumbnail`
+            },
+        },
     }));
 };
 
@@ -68,6 +80,8 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
     const queue = await queueFactory();
 
     queue.addWorker('hash-job', hashWorker, {
+        // concurrency: 1,
+
         onStart: async (id, payload) => {
             console.log('Job "hash-job" with id ' + id + ' has started processing.');  
         },
@@ -89,7 +103,7 @@ export const global_INIT_QUEUE = () => async (dispatch) => {
     });
 
     queue.addWorker('upload-job', uploadWorker, {
-        concurrency: 1,
+        // concurrency: 1,
         
         onStart: async (id, payload) => {
             console.log('Job "upload-job" with id ' + id + ' has started processing.');  

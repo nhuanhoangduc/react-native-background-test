@@ -29,12 +29,11 @@ const worker = async (id, { photoId }) => {
         }
     }
 
-    store.dispatch(global_UPDATE_LOCAL_PHOTO(photo._id, {
-        cacheUri: cacheUri,
-        hash: fileHash,
+    store.dispatch(global_UPDATE_LOCAL_PHOTO(photo.id, {
+        localIdentifier: fileHash,
     }));
     
-    store.dispatch(global_ADD_JOB('upload-job', { photoId: photo._id, }));
+    store.dispatch(global_ADD_JOB('upload-job', { photoId: photo.id, }));
 };
 
 export default worker;

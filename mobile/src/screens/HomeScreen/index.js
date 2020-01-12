@@ -6,7 +6,7 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { useDispatch } from 'react-redux';
 
 import Photos from './Photos';
-import { global_LOAD_LOCAL_PHOTOS, global_LOAD_UPLOADED_PHOTOS } from '@mobile/store/global/actions';
+import { global_LOAD_LOCAL_PHOTOS } from '@mobile/store/global/actions';
 
 
 const HomeScreen = () => {
@@ -47,18 +47,17 @@ const HomeScreen = () => {
 
             if (result.page_info.has_next_page) {
                 loadPhotos(result.page_info.end_cursor);
+            } else {
+
             }
         } catch (error) {
             console.log(error)
         }
     };
 
-    // useEffect(() => {
-    //     if (!loading && !error && data && data.uploadedImages) {
-    //         dispatch(global_LOAD_UPLOADED_PHOTOS(data.uploadedImages));
-    //         loadPhotos();
-    //     }
-    // }, [loading]);
+    useEffect(() => {
+        loadPhotos();
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

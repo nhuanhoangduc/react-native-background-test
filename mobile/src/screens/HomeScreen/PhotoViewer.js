@@ -7,6 +7,7 @@ import { global_photoDetailSelector } from '@mobile/store/global/selectors';
 
 const PhotoViewer = memo(({ id, isLocal }) => {
     const photo = useSelector((store) => global_photoDetailSelector(store, id, isLocal));
+    const token = useSelector((store) => store.global.token);
 
     return (
         <Image
@@ -14,7 +15,12 @@ const PhotoViewer = memo(({ id, isLocal }) => {
                 width: 0.3 * Dimensions.get('window').width,
                 height: 0.3 * Dimensions.get('window').width,
             }}
-            source={{ uri: photo.imageUrl }}
+            source={{
+                uri: photo.imageUrl,
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            }}
         />
     );
 });

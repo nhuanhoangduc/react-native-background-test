@@ -19,7 +19,7 @@ const useInputChanges = (initialValue = '') => {
 
 const LoginScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { loading, error, response, request } = usePost('/authenticate');
+    const { loading, error, response, request } = usePost('/api/authenticate');
 
     useEffect(() => {
         if (!loading && !error && response && response.data) {

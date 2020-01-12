@@ -1,3 +1,3 @@
 export default {
-    serverUrl: 'https://services.creativinnovations.com/photostore/api',
+    serverUrl: 'https://services.creativinnovations.com/photostore',
 };
