@@ -11,19 +11,23 @@ const worker = async (id, { photoId }) => {
     const state = store.getState();
     const photo = global_photoDetailSelector(state, photoId, true);
 
+    if (!photo) {
+        return;
+    }
+
     const data = new FormData();
 
     if (photo.sourceType === 'video') {
         data.append('video', {
             uri: photo.imageUrl,
-            type: mime.getType(photo.filename),
-            name: photo.filename,
+            type: mime.getType(photo.fileName),
+            name: photo.fileName,
         });
     } else {
         data.append('photo', {
             uri: photo.imageUrl,
-            type: mime.getType(photo.filename),
-            name: photo.filename,
+            type: mime.getType(photo.fileName),
+            name: photo.fileName,
         });
     }
 
@@ -36,8 +40,6 @@ const worker = async (id, { photoId }) => {
             ? await baseApi.POST('/v1/api/videos', data)
             : await baseApi.POST('/v1/api/photos', data);
         const uploadedPhoto = response.data;
-
-        console.log(response.data);
 
         store.dispatch(global_LOAD_UPLOADED_PHOTO({
             ...uploadedPhoto,

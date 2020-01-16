@@ -1,16 +1,40 @@
-import React, { memo } from 'react';
-import { View, Image, Dimensions, Text } from 'react-native';
+import React, { memo, useState, useCallback } from 'react';
+import { View, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
+import ImageView from 'react-native-image-view';
 
 import { global_photoDetailSelector } from '@mobile/store/global/selectors';
 
 
 const PhotoViewer = memo(({ id, isLocal }) => {
+    const [showImage, setShowImage] = useState(null);
+
+
     const photo = useSelector((store) => global_photoDetailSelector(store, id, isLocal));
     const token = useSelector((store) => store.global.token);
 
+
+    const onPhotoPressed = useCallback(() => {
+        setShowImage([{
+            source: {
+                uri: photo.imageUrl,
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            },
+            title: photo.fileName,
+            width: photo.width,
+            height: photo.height,
+        }]);
+    }, [photo, token]);
+
+    const onImageViewerClosed = useCallback(() => {
+        setShowImage(null);
+    }, []);
+
+
     return (
-        <View style={{ position: 'relative', width: `${100/3}%`, }}>
+        <TouchableOpacity style={{ position: 'relative', width: `${100/3}%`, }} onPress={onPhotoPressed}>
             <Image
                 style={{
                     width: 0.3 * Dimensions.get('window').width,
@@ -31,7 +55,14 @@ const PhotoViewer = memo(({ id, isLocal }) => {
                     </Text>
                 </View>
             ) : null}
-        </View>
+
+            <ImageView
+                images={showImage || []}
+                imageIndex={0}
+                isVisible={showImage ? true : false}
+                onClose={onImageViewerClosed}
+            />
+        </TouchableOpacity>
     );
 });
 

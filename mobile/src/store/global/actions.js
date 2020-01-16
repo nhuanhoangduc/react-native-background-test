@@ -38,7 +38,7 @@ export const global_LOAD_LOCAL_PHOTOS = (nodes) => async (dispatch) => {
 
         memo[photo.filename] = {
             id: photo.filename,
-            filename: photo.filename,
+            fileName: photo.filename,
             imageUrl: photo.uri,
             
             creationDate: node.timestamp,
