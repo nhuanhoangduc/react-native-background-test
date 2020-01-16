@@ -10,14 +10,14 @@ const PhotoViewer = memo(({ id, isLocal }) => {
     const token = useSelector((store) => store.global.token);
 
     return (
-        <View style={{ position: 'relative', }}>
+        <View style={{ position: 'relative', width: `${100/3}%`, }}>
             <Image
                 style={{
                     width: 0.3 * Dimensions.get('window').width,
                     height: 0.3 * Dimensions.get('window').width,
                 }}
                 source={{
-                    uri: photo.imageUrl,
+                    uri: isLocal ? photo.imageUrl : photo.thumbnailUrl,
                     headers: {
                         'Authorization': 'Bearer ' + token,
                     },

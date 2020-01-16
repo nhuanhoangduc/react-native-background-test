@@ -75,9 +75,12 @@ export const global_LOAD_UPLOADED_PHOTO = (uploadedPhoto) => (dispatch) => {
         uploadedPhotos: {
             [uploadedPhoto.id]: {
                 ...uploadedPhoto,
-                imageUrl: uploadedPhoto.sourceType === 'video'
+                thumbnailUrl: uploadedPhoto.sourceType === 'video'
                     ? `${configs.serverUrl}/v1/api/videos/${uploadedPhoto.id}/thumbnail`
-                    : `${configs.serverUrl}/v1/api/photos/${uploadedPhoto.id}/thumbnail`
+                    : `${configs.serverUrl}/v1/api/photos/${uploadedPhoto.id}/thumbnail`,
+                imageUrl: uploadedPhoto.sourceType === 'video'
+                    ? `${configs.serverUrl}/v1/api/videos/${uploadedPhoto.id}`
+                    : `${configs.serverUrl}/v1/api/photos/${uploadedPhoto.id}`,
             },
         },
         lastTimestamp: uploadedPhoto.modificationDate + 1,

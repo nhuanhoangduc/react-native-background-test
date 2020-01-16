@@ -25,7 +25,7 @@ const Photos = memo(() => {
                 stickySectionHeadersEnabled={true}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item: photos, section }) => (
-                    <View style={{ marginTop: 10, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
+                    <View style={{ marginVertical: 5, paddingHorizontal: 10, flexDirection: 'row', }}>
                         {_.map(photos, (photo) => <PhotoViewer key={photo.id} id={photo.id} isLocal={section.isLocal} />)}
                     </View>
                 )}
