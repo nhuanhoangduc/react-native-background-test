@@ -27,7 +27,7 @@
     "graphql-tag": "^2.10.1",
     "mime": "^2.4.4",
     "mime-types": "^2.1.26",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-background-fetch": "^2.7.1",
